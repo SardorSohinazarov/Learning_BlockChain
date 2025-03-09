@@ -1,6 +1,6 @@
 ﻿/// <summary>
 /// 🏗 Oxirgi versiyada nimalar bor:
-/// 
+/// Kriptografik imzolar bilan xavfsizlikni oshirish.
 /// </summary>
 
 using BlockChain_005;
