@@ -1,6 +1,4 @@
 ﻿using BlockChain_004;
-using System;
-using System.Reflection.Metadata;
 
 /// <summary>
 /// Sodda blokchain dasturini yaratamiz, 3- sidan farqi shuki

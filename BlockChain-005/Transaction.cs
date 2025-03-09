@@ -15,7 +15,19 @@ public class Transaction
             return;  // ⛏ Mukofot tranzaktsiyalari (Mining) imzolanmaydi
 
         using var ecdsa = ECDsa.Create();
-        ecdsa.ImportFromPem(privateKey);  // 🛠 `ImportFromPem` bilan yuklash
+
+        // 🔄 PEM formatdagi xususiy kalitni tozalash
+        string cleanedKey = privateKey
+            .Replace("-----BEGIN PRIVATE KEY-----", "")
+            .Replace("-----END PRIVATE KEY-----", "")
+            .Replace("\r", "")
+            .Replace("\n", "");
+
+        // 🛠 Base64 formatdagi kalitni byte[] ko‘rinishga o‘tkazish
+        byte[] privateKeyBytes = Convert.FromBase64String(cleanedKey);
+
+        // 🔄 `ImportECPrivateKey` bilan yuklash (EC kalitlari uchun)
+        ecdsa.ImportECPrivateKey(privateKeyBytes, out _);
 
         string txData = GetTransactionData();
         byte[] hash = SHA256.HashData(Encoding.UTF8.GetBytes(txData));  // 🔒 Tranzaktsiya xeshini olish
@@ -53,8 +65,6 @@ public class Transaction
     }
 
     // 📄 Tranzaktsiya ma'lumotlarini olish
-    public string GetTransactionData()
-    {
-        return $"{FromAddress}-{ToAddress}-{Amount}";  // 🔗 Tranzaktsiya ma'lumotlari
-    }
+    public string GetTransactionData() 
+        => $"{FromAddress}-{ToAddress}-{Amount}";  // 🔗 Tranzaktsiya ma'lumotlari
 }

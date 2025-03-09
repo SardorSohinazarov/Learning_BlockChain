@@ -12,6 +12,10 @@ namespace BlockChain_005
         public string Hash { get; set; }
         public int Nonce { get; set; }
 
+        // 🏗 Blok yaratish
+        public Block() 
+            => Hash = CalculateHash();
+
         // 🔄 Blok uchun xesh yaratamiz
         public string CalculateHash()
         {
@@ -23,8 +27,6 @@ namespace BlockChain_005
 
         // 🔒 Blokdagi tranzaktsiyalarni tekshirish
         public bool HasValidTransactions()
-        {
-            return Transactions.All(tx => tx.IsValid());
-        }
+            => Transactions.All(tx => tx.IsValid());
     }
 }

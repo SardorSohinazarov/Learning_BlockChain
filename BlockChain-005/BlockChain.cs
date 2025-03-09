@@ -7,10 +7,8 @@
         public int Difficulty { get; set; } = 4;
         public decimal MiningReward { get; set; } = 50m;
 
-        public Blockchain()
-        {
-            Chain.Add(CreateGenesisBlock());
-        }
+        public Blockchain() 
+            => Chain.Add(CreateGenesisBlock());
 
         private Block CreateGenesisBlock()
         {
