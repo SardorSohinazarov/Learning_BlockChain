@@ -3,9 +3,11 @@ using System.Text;
 
 public class Transaction
 {
+    public string Id { get; set; } = Guid.NewGuid().ToString(); // 🆔 Tranzaktsiya identifikatori
     public string FromAddress { get; set; }        // 🏠 Jo'natuvchi manzili (jamoat kaliti)
     public string ToAddress { get; set; }          // 🏠 Qabul qiluvchi manzili
     public decimal Amount { get; set; }            // 💸 Miqdor
+    public decimal Fee { get; set; } = 0.1m;       // 💰 Tranzaktsiya to'lovi
     public string Signature { get; private set; }  // ✍️ Imzo
 
     // 🔏 Tranzaktsiyani imzolash
@@ -65,6 +67,6 @@ public class Transaction
     }
 
     // 📄 Tranzaktsiya ma'lumotlarini olish
-    public string GetTransactionData() 
-        => $"{FromAddress}-{ToAddress}-{Amount}";  // 🔗 Tranzaktsiya ma'lumotlari
+    public string GetTransactionData()
+        => $"Id:{Id}\nFrom:{FromAddress}\nTo:{ToAddress}\nAmount:{Amount}\nComission:{Fee}";  // 🔗 Tranzaktsiya ma'lumotlari
 }

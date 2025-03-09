@@ -35,12 +35,19 @@
             MineBlock(block);
             Chain.Add(block);
 
+            // 🔄 Murakkablikni dinamik boshqarish
+            AdjustDifficulty();
+
+            // Joriy blokdagi barcha komissiyalarni hisoblash
+            var totalFees = block.Transactions.Sum(tx => tx.Fee);
+
+            // Mukofotni minerga o'tkazish
             PendingTransactions.Clear();
             PendingTransactions.Add(new Transaction
             {
                 FromAddress = null,
                 ToAddress = minerAddress,
-                Amount = MiningReward
+                Amount = MiningReward + totalFees  // Mukofot + komissiyalar
             });
         }
 
@@ -91,6 +98,44 @@
                     return false;
             }
             return true;
+        }
+
+        public void PrintBlockchain()
+        {
+            foreach (var block in Chain)
+            {
+                Console.WriteLine($"Blok: {block.Index}, Xesh: {block.Hash}, Oldingi Xesh: {block.PreviousHash}");
+                Console.WriteLine("Tranzaktsiyalar:");
+                Console.WriteLine("—————————————————————————————————————");
+                foreach (var tx in block.Transactions)
+                {
+                    Console.WriteLine(tx.GetTransactionData());
+                    Console.WriteLine("—————————————————————————————————————");
+                }
+                Console.WriteLine("——————————————————————————————————————————————————————————————————————————————");
+            }
+        }
+
+        public List<Transaction> GetTransactionHistory(string address)
+        {
+            return Chain.SelectMany(b => b.Transactions)
+                        .Where(tx => tx.FromAddress == address || tx.ToAddress == address)
+                        .ToList();
+        }
+
+        public Block GetBlockByHash(string hash)
+            => Chain.FirstOrDefault(b => b.Hash == hash);
+
+        public Block GetBlockByIndex(int index)
+            => Chain.FirstOrDefault(b => b.Index == index);
+
+        public void AdjustDifficulty()
+        {
+            if (Chain.Count % 5 == 0)
+            {
+                Difficulty++;
+                Console.WriteLine($"Murakkablik oshirildi: {Difficulty}");
+            }
         }
     }
 }

@@ -20,10 +20,13 @@ namespace BlockChain_005
         public string CalculateHash()
         {
             using var sha256 = SHA256.Create();
-            string rawData = $"{Index}{Timestamp}{PreviousHash}{Nonce}{string.Join("", Transactions.Select(t => t.GetTransactionData()))}";
+            string rawData = $"{Index}{GetFormattedTimestamp()}{PreviousHash}{Nonce}{string.Join("", Transactions.Select(t => t.GetTransactionData()))}";
             byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawData));
             return Convert.ToHexString(bytes);
         }
+
+        public string GetFormattedTimestamp()
+            => Timestamp.ToString("yyyy-MM-dd HH:mm:ss");
 
         // 🔒 Blokdagi tranzaktsiyalarni tekshirish
         public bool HasValidTransactions()
